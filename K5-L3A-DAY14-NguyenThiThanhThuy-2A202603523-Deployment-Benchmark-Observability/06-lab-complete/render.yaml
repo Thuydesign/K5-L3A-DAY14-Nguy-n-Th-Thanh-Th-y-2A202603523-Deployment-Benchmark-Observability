@@ -1,0 +1,30 @@
+# Render Blueprint: agent (Docker) + Redis (Key Value).
+# Secret không ghi giá trị: AGENT_API_KEY dùng generateValue.
+services:
+  - type: web
+    name: ai-agent
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "10"
+      - key: DAILY_BUDGET_USD
+        value: "1.0"
+      - key: AGENT_API_KEY
+        generateValue: true
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: agent-redis
+          property: connectionString
+
+  - type: keyvalue
+    name: agent-redis
+    plan: free
+    ipAllowList: []
+    maxmemoryPolicy: allkeys-lru

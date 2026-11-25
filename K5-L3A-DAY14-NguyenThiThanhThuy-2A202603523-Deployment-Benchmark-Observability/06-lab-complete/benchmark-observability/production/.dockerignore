@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+grafana/
+prometheus/
+nginx/
+locust/
+benchmark-results/
+*.md
